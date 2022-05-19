@@ -103,6 +103,7 @@ export const CustomerListResults = ({ customers, ...rest }) => {
                   hover
                   key={customer.id}
                   selected={selectedCustomerIds.indexOf(customer.id) !== -1}
+                  max-height={150}
                 >
                   <TableCell padding="checkbox">
                     <Checkbox
@@ -134,6 +135,30 @@ export const CustomerListResults = ({ customers, ...rest }) => {
                   </TableCell>
                   <TableCell>
                     {customer.email}
+                  </TableCell>
+                  <TableCell>
+                    {`${customer.address.city}, ${customer.address.state}, ${customer.address.country}`}
+                  </TableCell>
+                  <TableCell>
+                    {customer.phone}
+                  </TableCell>
+                  <TableCell>
+                    {format(customer.createdAt, 'dd/MM/yyyy')}
+                  </TableCell>
+                  <TableCell>
+                    {`${customer.address.city}, ${customer.address.state}, ${customer.address.country}`}
+                  </TableCell>
+                  <TableCell>
+                    {customer.phone}
+                  </TableCell>
+                  <TableCell>
+                    {format(customer.createdAt, 'dd/MM/yyyy')}
+                  </TableCell>
+                  <TableCell>
+                    {customer.phone}
+                  </TableCell>
+                  <TableCell>
+                    {format(customer.createdAt, 'dd/MM/yyyy')}
                   </TableCell>
                   <TableCell>
                     {`${customer.address.city}, ${customer.address.state}, ${customer.address.country}`}
