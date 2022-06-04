@@ -1,116 +1,82 @@
+import { useEffect, useReducer, useState } from 'react';
 import Head from 'next/head';
-import { Box, Container, Grid } from '@mui/material';
-import { Budget } from '../components/dashboard/budget';
-import { LatestOrders } from '../components/dashboard/latest-orders';
-import { LatestProducts } from '../components/dashboard/latest-products';
-import { Sales } from '../components/dashboard/sales';
-import { TasksProgress } from '../components/dashboard/tasks-progress';
-import { TotalCustomers } from '../components/dashboard/total-customers';
-import { TotalProfit } from '../components/dashboard/total-profit';
-import { TrafficByDevice } from '../components/dashboard/traffic-by-device';
+import { Box, Container } from '@mui/material';
+import ProjectListResults from '../components/project/project-list-results';
+import NftListFilters from '../components/project/nft-list-filters';
 import { DashboardLayout } from '../components/dashboard-layout';
 
-const Dashboard = () => (
-  <>
-    <Head>
-      <title>
-        Dashboard | Material Kit
-      </title>
-    </Head>
-    <Box
-      component="main"
-      sx={{
-        flexGrow: 1,
-        py: 8
-      }}
-    >
-      <Container maxWidth={false}>
-        <Grid
-          container
-          spacing={3}
-        >
-          <Grid
-            item
-            lg={3}
-            sm={6}
-            xl={3}
-            xs={12}
-          >
-            <Budget />
-          </Grid>
-          <Grid
-            item
-            xl={3}
-            lg={3}
-            sm={6}
-            xs={12}
-          >
-            <TotalCustomers />
-          </Grid>
-          <Grid
-            item
-            xl={3}
-            lg={3}
-            sm={6}
-            xs={12}
-          >
-            <TasksProgress />
-          </Grid>
-          <Grid
-            item
-            xl={3}
-            lg={3}
-            sm={6}
-            xs={12}
-          >
-            <TotalProfit sx={{ height: '100%' }} />
-          </Grid>
-          <Grid
-            item
-            lg={8}
-            md={12}
-            xl={9}
-            xs={12}
-          >
-            <Sales />
-          </Grid>
-          <Grid
-            item
-            lg={4}
-            md={6}
-            xl={3}
-            xs={12}
-          >
-            <TrafficByDevice sx={{ height: '100%' }} />
-          </Grid>
-          <Grid
-            item
-            lg={4}
-            md={6}
-            xl={3}
-            xs={12}
-          >
-            <LatestProducts sx={{ height: '100%' }} />
-          </Grid>
-          <Grid
-            item
-            lg={8}
-            md={12}
-            xl={9}
-            xs={12}
-          >
-            <LatestOrders />
-          </Grid>
-        </Grid>
-      </Container>
-    </Box>
-  </>
-);
+const initialState = {
+  projectName: null,
+  twitterFollowersMin: null,
+  twitterFollowersMax: null,
+  discordMembersMin: null,
+  discordMembersMax: null,
+  description: null,
+  collectionCountMin: null,
+  collectionCountMax: null,
+  mintCostMin: null,
+  mintCostMax: null,
+  mintStartDate: null,
+  mintEndDate: null,
+  presaleStartDate: null,
+  presaleEndDate: null,
+  chains: [],
+  categories: [],
+  skip: 0,
+};
 
-Dashboard.getLayout = (page) => (
-  <DashboardLayout>
-    {page}
-  </DashboardLayout>
-);
+const reducer = (state, action) => {
+  switch (action.type) {
+    case 'chains':
+      return { ...state, chains: [...action.value] };
+    case 'categories':
+      return { ...state, categories: [...action.value] };
+    default:
+      return { ...state, [action.type]: action.value };
+  }
+};
 
-export default Dashboard;
+const Customers = () => {
+  const [filterState, dispatch] = useReducer(reducer, initialState);
+  const [projects, setProjects] = useState([]);
+
+  const getProjects = () => {
+    const filterString = Buffer.from(JSON.stringify(filterState)).toString('base64');
+
+    const getResults = async () => {
+      const result = await fetch(`/api/nfts?filters=${filterString}`).then((res) => res.json());
+
+      setProjects((prev) => [...prev, ...result]);
+    };
+    getResults();
+  };
+
+  useEffect(() => {
+    getProjects();
+  }, []);
+
+  return (
+    <>
+      <Head>
+        <title>NFT Project List</title>
+      </Head>
+      <Box
+        component="main"
+        sx={{
+          flexGrow: 1,
+          py: 8,
+        }}
+      >
+        <Container maxWidth={false}>
+          <NftListFilters {...filterState} dispatch={dispatch} onSave={getProjects} />
+          <Box sx={{ mt: 3 }}>
+            <ProjectListResults projects={projects} dispatch={dispatch} getProjects={getProjects} />
+          </Box>
+        </Container>
+      </Box>
+    </>
+  );
+};
+Customers.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
+
+export default Customers;

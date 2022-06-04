@@ -18,7 +18,7 @@ import { NavItem } from './nav-item';
 
 const items = [
   {
-    href: '/projects',
+    href: '/',
     icon: <ChartBarIcon fontSize="small" />,
     title: 'Projects',
   },
@@ -37,11 +37,11 @@ const items = [
     icon: <CogIcon fontSize="small" />,
     title: 'Settings',
   },
-  {
-    href: '/logout',
-    icon: <LockIcon fontSize="small" />,
-    title: 'Logout',
-  },
+  // {
+  //   href: '/logout',
+  //   icon: <LockIcon fontSize="small" />,
+  //   title: 'Logout',
+  // },
   // {
   //   href: '/register',
   //   icon: <UserAddIcon fontSize="small" />,
