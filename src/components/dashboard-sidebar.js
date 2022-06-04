@@ -154,7 +154,7 @@ export const DashboardSidebar = (props) => {
           sx: {
             backgroundColor: 'neutral.900',
             color: '#FFFFFF',
-            width: 280,
+            width: 200,
           },
         }}
         variant="permanent"

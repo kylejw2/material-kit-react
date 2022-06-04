@@ -1,10 +1,9 @@
-import { useReducer } from 'react';
+import { useEffect, useReducer, useState } from 'react';
 import Head from 'next/head';
 import { Box, Container } from '@mui/material';
-import { CustomerListResults } from '../components/customer/customer-list-results';
-import NftListFilters from '../components/customer/nft-list-filters';
+import ProjectListResults from '../components/project/project-list-results';
+import NftListFilters from '../components/project/nft-list-filters';
 import { DashboardLayout } from '../components/dashboard-layout';
-import { customers } from '../__mocks__/customers';
 
 const initialState = {
   projectName: null,
@@ -23,6 +22,7 @@ const initialState = {
   presaleEndDate: null,
   chains: [],
   categories: [],
+  skip: 0,
 };
 
 const reducer = (state, action) => {
@@ -38,9 +38,22 @@ const reducer = (state, action) => {
 
 const Customers = () => {
   const [filterState, dispatch] = useReducer(reducer, initialState);
+  const [projects, setProjects] = useState([]);
 
-  // Memoize this function to prevent api call spam
-  const onSaveFilters = () => {};
+  const getProjects = () => {
+    const filterString = Buffer.from(JSON.stringify(filterState)).toString('base64');
+
+    const getResults = async () => {
+      const result = await fetch(`/api/nfts?filters=${filterString}`).then((res) => res.json());
+
+      setProjects((prev) => [...prev, ...result]);
+    };
+    getResults();
+  };
+
+  useEffect(() => {
+    getProjects();
+  }, []);
 
   return (
     <>
@@ -55,9 +68,9 @@ const Customers = () => {
         }}
       >
         <Container maxWidth={false}>
-          <NftListFilters {...filterState} dispatch={dispatch} />
+          <NftListFilters {...filterState} dispatch={dispatch} onSave={getProjects} />
           <Box sx={{ mt: 3 }}>
-            <CustomerListResults customers={customers} />
+            <ProjectListResults projects={projects} dispatch={dispatch} getProjects={getProjects} />
           </Box>
         </Container>
       </Box>

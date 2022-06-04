@@ -30,6 +30,7 @@ const NftListFilters = ({
   chains,
   categories,
   dispatch,
+  onSave
 }) => {
   const chainOptions = ['Ethereum', 'Fantom', 'Avalanche', 'Solana', 'Cardano', 'Polygon'];
 
@@ -283,7 +284,7 @@ const NftListFilters = ({
                 </Select>
               </Grid>
               <Grid item md={6} xs={12}>
-                <Button color="secondary" variant="contained" onClick={() => console.log('woohoo')}>
+                <Button color="secondary" variant="contained" onClick={() => onSave()}>
                   Save Filters
                 </Button>
               </Grid>
