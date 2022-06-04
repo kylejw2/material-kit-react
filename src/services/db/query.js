@@ -7,19 +7,19 @@ const makeQuery = (filters) => {
   }
   // twitterFollowersMin,
   if (filters.twitterFollowersMin) {
-    query.twitterFollowersMin = { $gte: +filters.twitterFollowersMin };
+    query.twitterFollowers = { $gte: +filters.twitterFollowersMin };
   }
   // twitterFollowersMax,
   if (filters.twitterFollowersMax) {
-    query.twitterFollowersMax = { $lte: +filters.twitterFollowersMax };
+    query.twitterFollowers = { ...query.twitterFollowers, $lte: +filters.twitterFollowersMax };
   }
   // discordMembersMin,
   if (filters.discordMembersMin) {
-    query.discordMembersMin = { $gte: +filters.discordMembersMin };
+    query.discordMembers = { $gte: +filters.discordMembersMin };
   }
   // discordMembersMax,
   if (filters.discordMembersMax) {
-    query.discordMembersMax = { $lte: +filters.discordMembersMax };
+    query.discordMembers = { ...query.discordMembers, $lte: +filters.discordMembersMax };
   }
   // description,
   if (filters.description) {
@@ -27,35 +27,35 @@ const makeQuery = (filters) => {
   }
   // collectionCountMin,
   if (filters.collectionCountMin) {
-    query.collectionCountMin = { $gte: +filters.collectionCountMin };
+    query.collectionCount = { $gte: +filters.collectionCountMin };
   }
   // collectionCountMax,
   if (filters.collectionCountMax) {
-    query.collectionCountMax = { $lte: +filters.collectionCountMax };
+    query.collectionCount = { ...query.collectionCount, $lte: +filters.collectionCountMax };
   }
   // mintCostMin,
   if (filters.mintCostMin) {
-    query.mintCostMin = { $gte: +filters.mintCostMin };
+    query.mintCost = { $gte: +filters.mintCostMin };
   }
   // mintCostMax,
   if (filters.mintCostMax) {
-    query.mintCostMax = { $lte: +filters.mintCostMax };
+    query.mintCost = { ...query.mintCost, $lte: +filters.mintCostMax };
   }
   // mintStartDate,
   if (filters.mintStartDate) {
-    query.mintStartDate = { $gte: new Date(filters.mintStartDate) };
+    query.mintDate = { $gte: new Date(filters.mintStartDate) };
   }
   // mintEndDate,
   if (filters.mintEndDate) {
-    query.mintEndDate = { $lte: new Date(filters.mintEndDate) };
+    query.mintDate = { ...query.mintDate, $lte: new Date(filters.mintEndDate) };
   }
   // presaleStartDate,
   if (filters.presaleStartDate) {
-    query.presaleStartDate = { $gte: new Date(filters.presaleStartDate) };
+    query.presaleDate = { $gte: new Date(filters.presaleStartDate) };
   }
   // presaleEndDate,
   if (filters.presaleEndDate) {
-    query.presaleEndDate = { $lte: new Date(filters.presaleEndDate) };
+    query.presaleDate = { ...query.presaleDate, $lte: new Date(filters.presaleEndDate) };
   }
   // chains,
   if (filters.chains && filters.chains.length) {

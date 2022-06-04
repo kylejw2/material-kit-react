@@ -46,9 +46,21 @@ const Customers = () => {
     const getResults = async () => {
       const result = await fetch(`/api/nfts?filters=${filterString}`).then((res) => res.json());
 
-      setProjects((prev) => [...prev, ...result]);
+      setProjects(result);
+      console.log(result.length);
     };
     getResults();
+  };
+
+  const fetchMore = () => {
+    const filterString = Buffer.from(JSON.stringify(filterState)).toString('base64');
+
+    const fetchMoreResults = async () => {
+      const result = await fetch(`/api/nfts?filters=${filterString}`).then((res) => res.json());
+
+      setProjects((prev) => [...prev, ...result]);
+    };
+    fetchMoreResults();
   };
 
   useEffect(() => {
@@ -70,7 +82,7 @@ const Customers = () => {
         <Container maxWidth={false}>
           <NftListFilters {...filterState} dispatch={dispatch} onSave={getProjects} />
           <Box sx={{ mt: 3 }}>
-            <ProjectListResults projects={projects} dispatch={dispatch} getProjects={getProjects} />
+            <ProjectListResults projects={projects} dispatch={dispatch} fetchMore={fetchMore} />
           </Box>
         </Container>
       </Box>

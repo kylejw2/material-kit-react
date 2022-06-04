@@ -13,7 +13,7 @@ import {
   Typography,
 } from '@mui/material';
 
-const ProjectListResults = ({ projects, dispatch, getProjects, ...rest }) => {
+const ProjectListResults = ({ projects, dispatch, fetchMore, ...rest }) => {
   const [selectedCustomerIds, setSelectedCustomerIds] = useState([]);
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(0);
@@ -64,7 +64,7 @@ const ProjectListResults = ({ projects, dispatch, getProjects, ...rest }) => {
 
     if ((newPage + 1) * limit >= projects.length) {
       dispatch({ type: 'skip', value: projects.length });
-      getProjects();
+      fetchMore();
     }
   };
 
